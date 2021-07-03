@@ -146,7 +146,8 @@ function! s:ShowCursorDetailForItem(loc, options) abort
     if g:ale_floating_preview || g:ale_detail_to_floating_preview
         call ale#floating_preview#Show(l:lines)
     else
-        call ale#preview#Show(l:lines, {'stay_here': l:stay_here})
+        let g:_item = a:loc
+        call ale#util#ShowMessage(l:message)
 
         " Clear the echo message if we manually displayed details.
         if !l:stay_here
@@ -159,9 +160,9 @@ function! ale#cursor#ShowCursorDetail() abort
     let l:buffer = bufnr('')
 
     " Only echo the warnings in normal mode, otherwise we will get problems.
-    if mode() isnot# 'n'
-        return
-    endif
+    " if mode() isnot# 'n'
+    "     return
+    " endif
 
     if ale#ShouldDoNothing(l:buffer)
         return

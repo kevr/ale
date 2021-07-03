@@ -23,18 +23,24 @@ function! ale#util#ShowMessage(string, ...) abort
         call ale#preview#CloseIfTypeMatches('ale-preview.message')
     endif
 
-    " We have to assume the user is using a monospace font.
-    if has('nvim') || (a:string !~? "\n" && len(a:string) < &columns)
-        execute 'echo a:string'
-    else
-        call ale#preview#Show(split(a:string, "\n"), extend(
-        \   {
-        \       'filetype': 'ale-preview.message',
-        \       'stay_here': 1,
-        \   },
-        \   l:options,
-        \))
+    let l:title = '[flake8] I'
+
+    if g:_item.type is# 'W'
+        let l:title = '[flake8] W'
+        call matchadd('ALEWarning', '\[flake8\] W', 100)
+    elseif g:_item.type is# 'E'
+        let l:title = '[flake8] E'
+        call matchadd('ALEError', '\[flake8\] E', 100)
     endif
+
+    call popup_atcursor(split(a:string, "\n"), {
+    \        'line': "cursor+2",
+    \        'title': get(l:, 'title', '[flake8]'),
+    \        'border': [0, 0, 0, 0],
+    \        'padding': [0, 1, 0, 1],
+    \        'moved': 'any',
+    \        'pos': 'botleft'
+    \    })
 endfunction
 
 " A wrapper function for execute, so we can test executing some commands.
