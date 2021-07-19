@@ -34,8 +34,7 @@ function! ale#util#ShowMessage(string, ...) abort
     endif
 
     call popup_atcursor(split(a:string, "\n"), {
-    \        'line': "cursor+2",
-    \        'title': get(l:, 'title', '[flake8]'),
+    \        'line': "cursor+1",
     \        'border': [0, 0, 0, 0],
     \        'padding': [0, 1, 0, 1],
     \        'moved': 'any',
